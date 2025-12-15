@@ -22,6 +22,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }, []);
 
     async function checkAuth() {
+        if (authState.isAuthenticated) {
+            setIsLoading(false);
+            return;
+        }
+
         try {
             const user = await getMe();
             setAuthState({ user, isAuthenticated: true });
@@ -34,6 +39,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     const login = (user: User) => {
         setAuthState({ user, isAuthenticated: true });
+        setIsLoading(false);
     };
 
     const logout = async () => {
