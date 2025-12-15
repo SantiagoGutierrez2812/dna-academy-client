@@ -1,4 +1,4 @@
-import { API_URL } from "./api";
+import { API_URL, fetchWithRefresh } from "./api";
 import type {
     Grade,
     CreateGradeDto,
@@ -7,12 +7,11 @@ import type {
 } from "../types/grade.types";
 
 export async function createGrade(dto: CreateGradeDto): Promise<Grade> {
-    const response = await fetch(`${API_URL}/grades`, {
+    const response = await fetchWithRefresh(`${API_URL}/grades`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
         },
-        credentials: "include",
         body: JSON.stringify(dto),
     });
 
@@ -26,12 +25,11 @@ export async function createGrade(dto: CreateGradeDto): Promise<Grade> {
 }
 
 export async function updateGrade(id: number, dto: UpdateGradeDto): Promise<Grade> {
-    const response = await fetch(`${API_URL}/grades/${id}`, {
+    const response = await fetchWithRefresh(`${API_URL}/grades/${id}`, {
         method: "PATCH",
         headers: {
             "Content-Type": "application/json",
         },
-        credentials: "include",
         body: JSON.stringify(dto),
     });
 
@@ -45,9 +43,8 @@ export async function updateGrade(id: number, dto: UpdateGradeDto): Promise<Grad
 }
 
 export async function deleteGrade(id: number): Promise<void> {
-    const response = await fetch(`${API_URL}/grades/${id}`, {
+    const response = await fetchWithRefresh(`${API_URL}/grades/${id}`, {
         method: "DELETE",
-        credentials: "include",
     });
 
     if (!response.ok) {

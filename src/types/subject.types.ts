@@ -43,6 +43,7 @@ export interface SubjectStudentsResponse {
 export interface StudentGradesResponse {
     message: string;
     data: {
+        studentSubjectId: number | null;
         grades: Grade[];
     };
 }

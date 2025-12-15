@@ -31,28 +31,45 @@ export default function MySubjects() {
         <div>
             <h1 className="text-2xl font-bold text-gray-800 mb-6">Mis Materias</h1>
 
-            {subjects.length === 0 ? (
-                <div className="bg-white rounded-lg shadow p-6 text-center text-gray-500">
-                    No tienes materias asignadas
-                </div>
-            ) : (
-                <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                    {subjects.map((subject) => (
-                        <Link
-                            key={subject.id}
-                            to={`/my-subjects/${subject.id}/students`}
-                            className="bg-white rounded-lg shadow p-6 hover:shadow-md transition-shadow"
-                        >
-                            <h2 className="text-lg font-semibold text-gray-800">
-                                {subject.name}
-                            </h2>
-                            <p className="text-sm text-blue-600 mt-2">
-                                Ver estudiantes &rarr;
-                            </p>
-                        </Link>
-                    ))}
-                </div>
-            )}
+            <div className="bg-white rounded-lg shadow overflow-hidden">
+                <table className="min-w-full divide-y divide-gray-200">
+                    <thead className="bg-gray-50">
+                        <tr>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Nombre
+                            </th>
+                            <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Acciones
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody className="bg-white divide-y divide-gray-200">
+                        {subjects.length === 0 ? (
+                            <tr>
+                                <td colSpan={2} className="px-6 py-4 text-center text-gray-500">
+                                    No tienes materias asignadas
+                                </td>
+                            </tr>
+                        ) : (
+                            subjects.map((subject) => (
+                                <tr key={subject.id}>
+                                    <td className="px-6 py-4 whitespace-nowrap">
+                                        {subject.name}
+                                    </td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                        <Link
+                                            to={`/my-subjects/${subject.id}/students`}
+                                            className="text-blue-600 hover:text-blue-900"
+                                        >
+                                            Ver Estudiantes
+                                        </Link>
+                                    </td>
+                                </tr>
+                            ))
+                        )}
+                    </tbody>
+                </table>
+            </div>
         </div>
     );
 }

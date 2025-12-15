@@ -1,4 +1,4 @@
-import { API_URL } from "./api";
+import { API_URL, fetchWithRefresh } from "./api";
 import type {
     User,
     PreLoginCredentials,
@@ -49,9 +49,8 @@ export async function verifyLoginOtp(credentials: VerifyOtpCredentials): Promise
 }
 
 export async function logout(): Promise<void> {
-    const response = await fetch(`${API_URL}/auth/logout`, {
+    const response = await fetchWithRefresh(`${API_URL}/auth/logout`, {
         method: "POST",
-        credentials: "include",
     });
 
     if (!response.ok) {
@@ -61,10 +60,7 @@ export async function logout(): Promise<void> {
 }
 
 export async function getMe(): Promise<User> {
-    const response = await fetch(`${API_URL}/auth/me`, {
-        method: "GET",
-        credentials: "include",
-    });
+    const response = await fetchWithRefresh(`${API_URL}/auth/me`);
 
     if (!response.ok) {
         const error = await response.json();

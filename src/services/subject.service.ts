@@ -1,4 +1,4 @@
-import { API_URL } from "./api";
+import { API_URL, fetchWithRefresh } from "./api";
 import type {
     Subject,
     CreateSubjectDto,
@@ -12,9 +12,7 @@ import type { Student } from "../types/student.types";
 import type { Grade } from "../types/grade.types";
 
 export async function getSubjects(): Promise<Subject[]> {
-    const response = await fetch(`${API_URL}/subjects`, {
-        credentials: "include",
-    });
+    const response = await fetchWithRefresh(`${API_URL}/subjects`);
 
     if (!response.ok) {
         const error = await response.json();
@@ -26,9 +24,7 @@ export async function getSubjects(): Promise<Subject[]> {
 }
 
 export async function getMySubjects(): Promise<Subject[]> {
-    const response = await fetch(`${API_URL}/subjects/my-subjects`, {
-        credentials: "include",
-    });
+    const response = await fetchWithRefresh(`${API_URL}/subjects/my-subjects`);
 
     if (!response.ok) {
         const error = await response.json();
@@ -40,9 +36,7 @@ export async function getMySubjects(): Promise<Subject[]> {
 }
 
 export async function getSubject(id: number): Promise<Subject> {
-    const response = await fetch(`${API_URL}/subjects/${id}`, {
-        credentials: "include",
-    });
+    const response = await fetchWithRefresh(`${API_URL}/subjects/${id}`);
 
     if (!response.ok) {
         const error = await response.json();
@@ -54,12 +48,11 @@ export async function getSubject(id: number): Promise<Subject> {
 }
 
 export async function createSubject(dto: CreateSubjectDto): Promise<Subject> {
-    const response = await fetch(`${API_URL}/subjects`, {
+    const response = await fetchWithRefresh(`${API_URL}/subjects`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
         },
-        credentials: "include",
         body: JSON.stringify(dto),
     });
 
@@ -73,12 +66,11 @@ export async function createSubject(dto: CreateSubjectDto): Promise<Subject> {
 }
 
 export async function updateSubject(id: number, dto: UpdateSubjectDto): Promise<Subject> {
-    const response = await fetch(`${API_URL}/subjects/${id}`, {
+    const response = await fetchWithRefresh(`${API_URL}/subjects/${id}`, {
         method: "PATCH",
         headers: {
             "Content-Type": "application/json",
         },
-        credentials: "include",
         body: JSON.stringify(dto),
     });
 
@@ -92,9 +84,8 @@ export async function updateSubject(id: number, dto: UpdateSubjectDto): Promise<
 }
 
 export async function deleteSubject(id: number): Promise<void> {
-    const response = await fetch(`${API_URL}/subjects/${id}`, {
+    const response = await fetchWithRefresh(`${API_URL}/subjects/${id}`, {
         method: "DELETE",
-        credentials: "include",
     });
 
     if (!response.ok) {
@@ -104,9 +95,7 @@ export async function deleteSubject(id: number): Promise<void> {
 }
 
 export async function getSubjectStudents(subjectId: number): Promise<Student[]> {
-    const response = await fetch(`${API_URL}/subjects/${subjectId}/students`, {
-        credentials: "include",
-    });
+    const response = await fetchWithRefresh(`${API_URL}/subjects/${subjectId}/students`);
 
     if (!response.ok) {
         const error = await response.json();
@@ -117,10 +106,8 @@ export async function getSubjectStudents(subjectId: number): Promise<Student[]> 
     return data.data.students;
 }
 
-export async function getStudentGrades(subjectId: number, studentId: number): Promise<Grade[]> {
-    const response = await fetch(`${API_URL}/subjects/${subjectId}/students/${studentId}/grades`, {
-        credentials: "include",
-    });
+export async function getStudentGrades(subjectId: number, studentId: number): Promise<{ studentSubjectId: number | null, grades: Grade[] }> {
+    const response = await fetchWithRefresh(`${API_URL}/subjects/${subjectId}/students/${studentId}/grades`);
 
     if (!response.ok) {
         const error = await response.json();
@@ -128,5 +115,5 @@ export async function getStudentGrades(subjectId: number, studentId: number): Pr
     }
 
     const data: StudentGradesResponse = await response.json();
-    return data.data.grades;
+    return { studentSubjectId: data.data.studentSubjectId, grades: data.data.grades };
 }

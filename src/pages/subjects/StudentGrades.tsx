@@ -13,6 +13,7 @@ export default function StudentGrades() {
     const [subject, setSubject] = useState<Subject | null>(null);
     const [student, setStudent] = useState<Student | null>(null);
     const [grades, setGrades] = useState<Grade[]>([]);
+    const [studentSubjectId, setStudentSubjectId] = useState<number | null>(null);
     const [loading, setLoading] = useState(true);
 
     const [showForm, setShowForm] = useState(false);
@@ -35,7 +36,8 @@ export default function StudentGrades() {
             ]);
             setSubject(subjectData);
             setStudent(studentData);
-            setGrades(gradesData);
+            setGrades(gradesData.grades);
+            setStudentSubjectId(gradesData.studentSubjectId);
         } catch (err) {
             toast.error(err instanceof Error ? err.message : "Error al cargar datos");
         } finally {
@@ -78,8 +80,7 @@ export default function StudentGrades() {
                 setGrades(grades.map(g => g.id === updated.id ? updated : g));
                 toast.success("Nota actualizada exitosamente");
             } else {
-                const gradesData = await getStudentGrades(Number(subjectId), Number(studentId));
-                if (gradesData.length === 0) {
+                if (!studentSubjectId) {
                     toast.error("El estudiante no está matriculado en esta materia");
                     setSubmitting(false);
                     return;
@@ -87,7 +88,7 @@ export default function StudentGrades() {
                 const newGrade = await createGrade({
                     value: Number(formData.value),
                     description: formData.description,
-                    studentSubjectId: gradesData[0]?.studentSubjectId || 0,
+                    studentSubjectId,
                 });
                 setGrades([...grades, newGrade]);
                 toast.success("Nota creada exitosamente");

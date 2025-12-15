@@ -1,4 +1,4 @@
-import { API_URL } from "./api";
+import { API_URL, fetchWithRefresh } from "./api";
 import type {
     UserAdmin,
     CreateUserDto,
@@ -8,9 +8,7 @@ import type {
 } from "../types/user.types";
 
 export async function getUsers(): Promise<UserAdmin[]> {
-    const response = await fetch(`${API_URL}/users`, {
-        credentials: "include",
-    });
+    const response = await fetchWithRefresh(`${API_URL}/users`);
 
     if (!response.ok) {
         const error = await response.json();
@@ -22,9 +20,7 @@ export async function getUsers(): Promise<UserAdmin[]> {
 }
 
 export async function getUser(id: number): Promise<UserAdmin> {
-    const response = await fetch(`${API_URL}/users/${id}`, {
-        credentials: "include",
-    });
+    const response = await fetchWithRefresh(`${API_URL}/users/${id}`);
 
     if (!response.ok) {
         const error = await response.json();
@@ -36,12 +32,11 @@ export async function getUser(id: number): Promise<UserAdmin> {
 }
 
 export async function createUser(dto: CreateUserDto): Promise<UserAdmin> {
-    const response = await fetch(`${API_URL}/users`, {
+    const response = await fetchWithRefresh(`${API_URL}/users`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
         },
-        credentials: "include",
         body: JSON.stringify(dto),
     });
 
@@ -55,12 +50,11 @@ export async function createUser(dto: CreateUserDto): Promise<UserAdmin> {
 }
 
 export async function updateUser(id: number, dto: UpdateUserDto): Promise<UserAdmin> {
-    const response = await fetch(`${API_URL}/users/${id}`, {
+    const response = await fetchWithRefresh(`${API_URL}/users/${id}`, {
         method: "PATCH",
         headers: {
             "Content-Type": "application/json",
         },
-        credentials: "include",
         body: JSON.stringify(dto),
     });
 
@@ -74,9 +68,8 @@ export async function updateUser(id: number, dto: UpdateUserDto): Promise<UserAd
 }
 
 export async function deleteUser(id: number): Promise<void> {
-    const response = await fetch(`${API_URL}/users/${id}`, {
+    const response = await fetchWithRefresh(`${API_URL}/users/${id}`, {
         method: "DELETE",
-        credentials: "include",
     });
 
     if (!response.ok) {

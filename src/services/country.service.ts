@@ -1,10 +1,8 @@
-import { API_URL } from "./api";
+import { API_URL, fetchWithRefresh } from "./api";
 import type { Country, CountriesResponse } from "../types/country.types";
 
 export async function getCountries(): Promise<Country[]> {
-    const response = await fetch(`${API_URL}/countries`, {
-        credentials: "include",
-    });
+    const response = await fetchWithRefresh(`${API_URL}/countries`);
 
     if (!response.ok) {
         const error = await response.json();

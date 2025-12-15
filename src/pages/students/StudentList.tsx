@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { getStudents, deleteStudent } from "../../services/student.service";
@@ -7,14 +7,32 @@ import type { Student } from "../../types/student.types";
 export default function StudentList() {
     const [students, setStudents] = useState<Student[]>([]);
     const [loading, setLoading] = useState(true);
+    const [search, setSearch] = useState("");
+    const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
     useEffect(() => {
         loadStudents();
     }, []);
 
-    async function loadStudents() {
+    useEffect(() => {
+        if (debounceRef.current) {
+            clearTimeout(debounceRef.current);
+        }
+
+        debounceRef.current = setTimeout(() => {
+            loadStudents(search);
+        }, 300);
+
+        return () => {
+            if (debounceRef.current) {
+                clearTimeout(debounceRef.current);
+            }
+        };
+    }, [search]);
+
+    async function loadStudents(searchTerm?: string) {
         try {
-            const data = await getStudents();
+            const data = await getStudents(searchTerm);
             setStudents(data);
         } catch (err) {
             toast.error(err instanceof Error ? err.message : "Error al cargar estudiantes");
@@ -49,6 +67,16 @@ export default function StudentList() {
                 >
                     Nuevo Estudiante
                 </Link>
+            </div>
+
+            <div className="mb-4">
+                <input
+                    type="text"
+                    placeholder="Buscar por nombre, email o documento..."
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                    className="w-full max-w-md px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
             </div>
 
             <div className="bg-white rounded-lg shadow overflow-hidden">

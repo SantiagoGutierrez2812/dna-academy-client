@@ -1,4 +1,4 @@
-import { API_URL } from "./api";
+import { API_URL, fetchWithRefresh } from "./api";
 import type {
     Student,
     CreateStudentDto,
@@ -7,10 +7,13 @@ import type {
     StudentsResponse
 } from "../types/student.types";
 
-export async function getStudents(): Promise<Student[]> {
-    const response = await fetch(`${API_URL}/students`, {
-        credentials: "include",
-    });
+export async function getStudents(search?: string): Promise<Student[]> {
+    const params = new URLSearchParams();
+    if (search) params.append("search", search);
+
+    const url = `${API_URL}/students${params.toString() ? `?${params.toString()}` : ""}`;
+
+    const response = await fetchWithRefresh(url);
 
     if (!response.ok) {
         const error = await response.json();
@@ -22,9 +25,7 @@ export async function getStudents(): Promise<Student[]> {
 }
 
 export async function getStudent(id: number): Promise<Student> {
-    const response = await fetch(`${API_URL}/students/${id}`, {
-        credentials: "include",
-    });
+    const response = await fetchWithRefresh(`${API_URL}/students/${id}`);
 
     if (!response.ok) {
         const error = await response.json();
@@ -36,12 +37,11 @@ export async function getStudent(id: number): Promise<Student> {
 }
 
 export async function createStudent(dto: CreateStudentDto): Promise<Student> {
-    const response = await fetch(`${API_URL}/students`, {
+    const response = await fetchWithRefresh(`${API_URL}/students`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
         },
-        credentials: "include",
         body: JSON.stringify(dto),
     });
 
@@ -55,12 +55,11 @@ export async function createStudent(dto: CreateStudentDto): Promise<Student> {
 }
 
 export async function updateStudent(id: number, dto: UpdateStudentDto): Promise<Student> {
-    const response = await fetch(`${API_URL}/students/${id}`, {
+    const response = await fetchWithRefresh(`${API_URL}/students/${id}`, {
         method: "PATCH",
         headers: {
             "Content-Type": "application/json",
         },
-        credentials: "include",
         body: JSON.stringify(dto),
     });
 
@@ -74,13 +73,38 @@ export async function updateStudent(id: number, dto: UpdateStudentDto): Promise<
 }
 
 export async function deleteStudent(id: number): Promise<void> {
-    const response = await fetch(`${API_URL}/students/${id}`, {
+    const response = await fetchWithRefresh(`${API_URL}/students/${id}`, {
         method: "DELETE",
-        credentials: "include",
     });
 
     if (!response.ok) {
         const error = await response.json();
         throw new Error(error.message || "Error al eliminar estudiante");
+    }
+}
+
+export async function enrollStudent(studentId: number, subjectId: number): Promise<void> {
+    const response = await fetchWithRefresh(`${API_URL}/students/${studentId}/subjects`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ subjectId }),
+    });
+
+    if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.message || "Error al matricular estudiante");
+    }
+}
+
+export async function unenrollStudent(studentId: number, subjectId: number): Promise<void> {
+    const response = await fetchWithRefresh(`${API_URL}/students/${studentId}/subjects/${subjectId}`, {
+        method: "DELETE",
+    });
+
+    if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.message || "Error al desmatricular estudiante");
     }
 }

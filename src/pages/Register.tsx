@@ -3,7 +3,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { register } from "../services/auth.service";
 
-export function Component() {
+export default function Register() {
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
 
@@ -38,7 +38,9 @@ export function Component() {
                 documentNumber: formData.documentNumber,
                 password: formData.password,
             });
-            toast.success("Registro exitoso. Un administrador debe aprobar tu cuenta antes de iniciar sesión.");
+            toast.success("Registro exitoso. Un administrador debe aprobar tu cuenta antes de iniciar sesión.", {
+                autoClose: 8000,
+            });
             navigate("/login");
         } catch (err) {
             toast.error(err instanceof Error ? err.message : "Error al registrar");

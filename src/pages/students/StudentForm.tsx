@@ -143,6 +143,9 @@ export default function StudentForm() {
                     <div className="mb-6">
                         <label htmlFor="countryId" className="block text-sm font-medium text-gray-700 mb-1">
                             País
+                            <span className="ml-2 text-xs font-normal text-gray-500">
+                                (Datos de API externa)
+                            </span>
                         </label>
                         <select
                             id="countryId"

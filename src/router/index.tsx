@@ -2,14 +2,29 @@ import { createBrowserRouter, Navigate } from "react-router-dom";
 import MainLayout from "../layouts/MainLayout";
 import ProtectedRoute from "../components/ProtectedRoute";
 
+import Login from "../pages/Login";
+import Register from "../pages/Register";
+import Dashboard from "../pages/Dashboard";
+import UserList from "../pages/users/UserList";
+import UserForm from "../pages/users/UserForm";
+import StudentList from "../pages/students/StudentList";
+import StudentForm from "../pages/students/StudentForm";
+import SubjectList from "../pages/subjects/SubjectList";
+import SubjectForm from "../pages/subjects/SubjectForm";
+import SubjectStudents from "../pages/subjects/SubjectStudents";
+import StudentGrades from "../pages/subjects/StudentGrades";
+import MySubjects from "../pages/professional/MySubjects";
+import ProfessionalSubjectStudents from "../pages/professional/SubjectStudents";
+import ProfessionalStudentGrades from "../pages/professional/StudentGrades";
+
 export const router = createBrowserRouter([
     {
         path: "/login",
-        lazy: () => import("../pages/Login"),
+        element: <Login />,
     },
     {
         path: "/register",
-        lazy: () => import("../pages/Register"),
+        element: <Register />,
     },
     {
         path: "/",
@@ -24,7 +39,7 @@ export const router = createBrowserRouter([
                     },
                     {
                         path: "dashboard",
-                        lazy: () => import("../pages/Dashboard").then(m => ({ Component: m.default })),
+                        element: <Dashboard />,
                     },
                     {
                         path: "users",
@@ -32,15 +47,15 @@ export const router = createBrowserRouter([
                         children: [
                             {
                                 index: true,
-                                lazy: () => import("../pages/users/UserList").then(m => ({ Component: m.default })),
+                                element: <UserList />,
                             },
                             {
                                 path: "new",
-                                lazy: () => import("../pages/users/UserForm").then(m => ({ Component: m.default })),
+                                element: <UserForm />,
                             },
                             {
                                 path: ":id/edit",
-                                lazy: () => import("../pages/users/UserForm").then(m => ({ Component: m.default })),
+                                element: <UserForm />,
                             },
                         ],
                     },
@@ -50,15 +65,15 @@ export const router = createBrowserRouter([
                         children: [
                             {
                                 index: true,
-                                lazy: () => import("../pages/students/StudentList").then(m => ({ Component: m.default })),
+                                element: <StudentList />,
                             },
                             {
                                 path: "new",
-                                lazy: () => import("../pages/students/StudentForm").then(m => ({ Component: m.default })),
+                                element: <StudentForm />,
                             },
                             {
                                 path: ":id/edit",
-                                lazy: () => import("../pages/students/StudentForm").then(m => ({ Component: m.default })),
+                                element: <StudentForm />,
                             },
                         ],
                     },
@@ -68,23 +83,23 @@ export const router = createBrowserRouter([
                         children: [
                             {
                                 index: true,
-                                lazy: () => import("../pages/subjects/SubjectList").then(m => ({ Component: m.default })),
+                                element: <SubjectList />,
                             },
                             {
                                 path: "new",
-                                lazy: () => import("../pages/subjects/SubjectForm").then(m => ({ Component: m.default })),
+                                element: <SubjectForm />,
                             },
                             {
                                 path: ":id/edit",
-                                lazy: () => import("../pages/subjects/SubjectForm").then(m => ({ Component: m.default })),
+                                element: <SubjectForm />,
                             },
                             {
                                 path: ":id/students",
-                                lazy: () => import("../pages/subjects/SubjectStudents").then(m => ({ Component: m.default })),
+                                element: <SubjectStudents />,
                             },
                             {
                                 path: ":id/students/:studentId/grades",
-                                lazy: () => import("../pages/subjects/StudentGrades").then(m => ({ Component: m.default })),
+                                element: <StudentGrades />,
                             },
                         ],
                     },
@@ -94,15 +109,15 @@ export const router = createBrowserRouter([
                         children: [
                             {
                                 index: true,
-                                lazy: () => import("../pages/professional/MySubjects").then(m => ({ Component: m.default })),
+                                element: <MySubjects />,
                             },
                             {
                                 path: ":id/students",
-                                lazy: () => import("../pages/professional/SubjectStudents").then(m => ({ Component: m.default })),
+                                element: <ProfessionalSubjectStudents />,
                             },
                             {
                                 path: ":id/students/:studentId/grades",
-                                lazy: () => import("../pages/professional/StudentGrades").then(m => ({ Component: m.default })),
+                                element: <ProfessionalStudentGrades />,
                             },
                         ],
                     },

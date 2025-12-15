@@ -6,7 +6,7 @@ import { preLogin, verifyLoginOtp } from "../services/auth.service";
 
 type LoginStep = "credentials" | "otp";
 
-export function Component() {
+export default function Login() {
     const navigate = useNavigate();
     const { login } = useAuth();
 
