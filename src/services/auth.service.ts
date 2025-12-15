@@ -6,8 +6,7 @@ import type {
     PreLoginResponse,
     LoginResponse,
     MeResponse,
-    RegisterCredentials,
-    RegisterResponse
+    RegisterCredentials
 } from "../types/auth.types";
 
 export async function preLogin(credentials: PreLoginCredentials): Promise<string> {

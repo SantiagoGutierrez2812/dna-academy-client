@@ -53,14 +53,3 @@ export interface RegisterCredentials {
     password: string;
 }
 
-export interface RegisterResponse {
-    message: string;
-    data: {
-        user: {
-            id: number;
-            name: string;
-            email: string;
-            role: UserRole;
-        };
-    };
-}
